@@ -8,10 +8,12 @@ export default function App() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
+  const [nameFilter, setNameFilter] = useState<string>("")
 
   console.log(error)
-  useEffect(() => {
-    requestUsers({ name: "", age: "", limit: 4, offset: 0 })
+
+  const fetchUsers = () => {
+    requestUsers({ name: nameFilter, age: "", limit: 4, offset: 0 })
       .then((data) => {
         setUsers(data)
         setLoading(false)
@@ -25,7 +27,15 @@ export default function App() {
         setError(err)
         setLoading(false)
       })
-  }, [])
+  }
+
+  useEffect(() => {
+    fetchUsers()
+  }, [nameFilter])
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNameFilter(event.target.value)
+  }
 
   if (loading) {
     return <div>Loading...</div>
@@ -38,6 +48,8 @@ export default function App() {
   return (
     <div>
       <Requirements />
+      {/* Поле ввода для фильтрации по имени */}
+      <input type="text" value={nameFilter} onChange={handleNameChange} placeholder="Фильтр по имени" />
       <h2>Users List:</h2>
       <ul>
         {users.map((user) => (
