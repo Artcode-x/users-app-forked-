@@ -67,27 +67,33 @@ export default function App() {
       <Requirements />
       <input type="text" value={nameFilter} onChange={handleNameChange} placeholder="Фильтр по имени" />
       <input type="text" value={ageFilter} onChange={handleAgeFilter} placeholder="Фильтр по возрасту" />
-      <select onChange={handleItemsPerPageChange} value={itemsPerPage}>
-        <option value={4}>4</option>
-        <option value={8}>8</option>
-        <option value={12}>12</option>
-        <option value={16}>16</option>
-      </select>
+
       <h2>Users List:</h2>
       <ul>
         {users.map((user) => (
           <li key={user.id}>{`${user.name}, ${user.age}`}</li>
         ))}
       </ul>
-      <div>
-        <button
-          onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span> Page {currentPage} </span>
-        <button onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", paddingRight: "10px" }}>
+          <ul>By Page:</ul>
+          <select onChange={handleItemsPerPageChange} value={itemsPerPage}>
+            <option value={4}>4</option>
+            <option value={8}>8</option>
+            <option value={12}>12</option>
+            <option value={16}>16</option>
+          </select>
+        </div>
+        <div style={{ padding: "10px" }}>
+          <button
+            onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
+            disabled={currentPage === 1}
+          >
+            Prev
+          </button>
+          <span> Page {currentPage} </span>
+          <button onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+        </div>
       </div>
     </div>
   )
