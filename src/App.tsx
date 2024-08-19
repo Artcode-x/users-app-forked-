@@ -62,7 +62,13 @@ export default function App() {
   return (
     <div>
       <Requirements />
-      <input type="text" value={nameFilter} onChange={handleNameChange} placeholder="Фильтр по имени" />
+      <input
+        style={{ marginRight: "10px" }}
+        type="text"
+        value={nameFilter}
+        onChange={handleNameChange}
+        placeholder="Фильтр по имени"
+      />
       <input type="text" value={ageFilter} onChange={handleAgeFilter} placeholder="Фильтр по возрасту" />
 
       <h2>Users List:</h2>
@@ -75,7 +81,7 @@ export default function App() {
       </ul>
       <div style={{ display: "flex", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", paddingRight: "10px" }}>
-          <ul>By Page:</ul>
+          <ul style={{ marginRight: "10px" }}>By Page:</ul>
           <select onChange={handleItemsPerPageChange} value={itemsPerPage}>
             <option value={4}>4</option>
             <option value={8}>8</option>
