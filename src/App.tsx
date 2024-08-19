@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import { requestUsers, requestUsersWithError, User } from "./api"
 import "./styles.css"
 import Requirements from "./Requirements"
-
 export default function App() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
@@ -11,8 +10,6 @@ export default function App() {
   const [ageFilter, setAgeFilter] = useState<string>("")
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [itemsPerPage, setItemsPerPage] = useState<number>(4)
-
-  console.log(error)
 
   const fetchUsers = () => {
     const offset = (currentPage - 1) * itemsPerPage
@@ -70,9 +67,11 @@ export default function App() {
 
       <h2>Users List:</h2>
       <ul>
-        {users.map((user) => (
-          <li key={user.id}>{`${user.name}, ${user.age}`}</li>
-        ))}
+        {users.length === 0 ? (
+          <li>Users not found</li>
+        ) : (
+          users.map((user) => <li key={user.id}>{`${user.name}, ${user.age}`}</li>)
+        )}
       </ul>
       <div style={{ display: "flex", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", paddingRight: "10px" }}>
