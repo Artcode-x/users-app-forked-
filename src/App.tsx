@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { requestUsers, requestUsersWithError, User } from "./api"
 import "./styles.css"
-
 import Requirements from "./Requirements"
 
 export default function App() {
@@ -9,11 +8,15 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
   const [nameFilter, setNameFilter] = useState<string>("")
+  const [ageFilter, setAgeFilter] = useState<string>("")
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [itemsPerPage, setItemsPerPage] = useState<number>(4)
 
   console.log(error)
 
   const fetchUsers = () => {
-    requestUsers({ name: nameFilter, age: "", limit: 4, offset: 0 })
+    const offset = (currentPage - 1) * itemsPerPage
+    requestUsers({ name: nameFilter, age: ageFilter, limit: itemsPerPage, offset })
       .then((data) => {
         setUsers(data)
         setLoading(false)
@@ -31,10 +34,24 @@ export default function App() {
 
   useEffect(() => {
     fetchUsers()
-  }, [nameFilter])
+  }, [nameFilter, ageFilter, currentPage, itemsPerPage])
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNameFilter(event.target.value)
+    setCurrentPage(1)
+  }
+
+  const handleAgeFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAgeFilter(event.target.value)
+  }
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage)
+  }
+
+  const handleItemsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setItemsPerPage(Number(event.target.value))
+    setCurrentPage(1)
   }
 
   if (loading) {
@@ -48,14 +65,30 @@ export default function App() {
   return (
     <div>
       <Requirements />
-      {/* Поле ввода для фильтрации по имени */}
       <input type="text" value={nameFilter} onChange={handleNameChange} placeholder="Фильтр по имени" />
+      <input type="text" value={ageFilter} onChange={handleAgeFilter} placeholder="Фильтр по возрасту" />
+      <select onChange={handleItemsPerPageChange} value={itemsPerPage}>
+        <option value={4}>4</option>
+        <option value={8}>8</option>
+        <option value={12}>12</option>
+        <option value={16}>16</option>
+      </select>
       <h2>Users List:</h2>
       <ul>
         {users.map((user) => (
           <li key={user.id}>{`${user.name}, ${user.age}`}</li>
         ))}
       </ul>
+      <div>
+        <button
+          onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span> Page {currentPage} </span>
+        <button onClick={() => handlePageChange(currentPage + 1)}>Next</button>
+      </div>
     </div>
   )
 }
