@@ -61,7 +61,7 @@ export default function App() {
 
   return (
     <div>
-      <Requirements />
+      {/* <Requirements /> */}
       <input
         style={{ marginRight: "10px" }}
         type="text"
